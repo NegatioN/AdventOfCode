@@ -1,5 +1,5 @@
 import os
-from common import load_data
+from common import load_data, get_input
 from copy import deepcopy
 from functools import partial
 
@@ -75,11 +75,6 @@ def computer(a, init_f, final_hook_f, debug=False):
   return final_hook_f(a)
 
 
-import sys
-inp = sys.argv[1]
-if inp == 'run':
-    a = [int(x) for x in data[0].split(',')]
-else:
-    a = [int(x) for x in inp.split(',')]
+a = [int(x) for x in get_input(5).split(',')]
 
 computer(deepcopy(a), init_f=lambda x: x, final_hook_f=print, debug=False)

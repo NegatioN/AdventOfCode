@@ -13,3 +13,14 @@ def load_data(day, my_cookie, year=2019, data_folder='data'):
     f.write(input_text)
 
   return input_text.strip().split('\n')
+
+import sys
+import os
+def get_input(day, year=2019):
+  inp = sys.argv[1]
+  if inp == 'run':
+      c = os.environ.get('AOC_COOKIE')
+      return load_data(day, c, year)
+  else:
+      return inp
+  return a
