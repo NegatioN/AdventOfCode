@@ -11,7 +11,7 @@ valid_opcodes = [1,2,3,4,5,6,7,8,9]
 
 functions = {1: {'f': lambda x, y: x + y, 'n': 2},
              2: {'f': lambda x, y: x * y, 'n': 2},
-             3: {'f': lambda: 1, 'n': 0},
+             3: {'f': lambda: 2, 'n': 0},
              4: {'f': lambda x: print(x), 'n': 1},
              5: {'f': lambda x, y: x != 0, 'n': 2},
              6: {'f': lambda x, y: x == 0, 'n': 2},
