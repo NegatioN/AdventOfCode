@@ -15,9 +15,10 @@ fn p1() {
 fn p2() {
     let data = get_input("src/input.txt");
     let mut ans: f32 = 0.0;
+    let (mut fuel, mut curr_mass): (f32, f32);
+
     for mass in data.iter() {
-        let mut curr_mass = *mass;
-        let mut fuel: f32;
+        curr_mass = *mass;
 
         while curr_mass > 6.0 {
             fuel = (curr_mass / 3.0).floor() - 2.0;
