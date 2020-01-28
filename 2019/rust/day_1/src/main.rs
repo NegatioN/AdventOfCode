@@ -17,9 +17,7 @@ fn p2() {
     let mut ans: f32 = 0.0;
     for mass in data.iter() {
         let mut curr_mass = *mass;
-        let mut fuel = (curr_mass / 3.0).floor() - 2.0;
-        ans += fuel;
-        curr_mass = fuel;
+        let mut fuel: f32;
 
         while curr_mass > 6.0 {
             fuel = (curr_mass / 3.0).floor() - 2.0;
