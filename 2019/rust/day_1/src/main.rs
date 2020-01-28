@@ -2,10 +2,30 @@ use std::fs::File;
 use std::io::{BufRead, BufReader};
 
 fn main() {
+    p1();
+    p2();
+}
+
+fn p1() {
     let data = get_input("src/input.txt");
-    let mut ans: i32 = 0;
+    let ans: f32 = data.iter().map(|f| (*f / 3.0).floor() - 2.0).sum();
+    println!("{}", ans)
+}
+
+fn p2() {
+    let data = get_input("src/input.txt");
+    let mut ans: f32 = 0.0;
     for mass in data.iter() {
-        ans += ((*mass / 3.0).floor() - 2.0) as i32
+        let mut curr_mass = *mass;
+        let mut fuel = (curr_mass / 3.0).floor() - 2.0;
+        ans += fuel;
+        curr_mass = fuel;
+
+        while curr_mass > 6.0 {
+            fuel = (curr_mass / 3.0).floor() - 2.0;
+            ans += fuel;
+            curr_mass = fuel;
+        }
     }
     println!("{}", ans)
 }
