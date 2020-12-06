@@ -52,20 +52,15 @@ func (t *Ticket) Id() int {
 	for _, r := range t.Sequence[:7] {
 		t.Rows.traverse(r)
 	}
-
-
 	for _, r := range t.Sequence[7:] {
 		t.Seats.traverse(r)
 	}
-
 	return t.Rows.CurrentNum * 8 + t.Seats.CurrentNum
 }
 
 func parseTicket(text string) *Ticket {
 	return &Ticket{NewBSP(127, 'F'), NewBSP(7, 'L'), []rune(text)}
 }
-
-
 
 func main() {
 	lines, _ := readLines("../data/day5")
