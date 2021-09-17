@@ -7,3 +7,10 @@
       j myData
       :when (= 2020 (+ i j))]
   (* i j) )
+
+
+(for [i myData
+      j myData
+      y myData
+      :when (= 2020 (+ i j y))]
+  (* i j y) )
