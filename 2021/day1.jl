@@ -3,13 +3,11 @@ depths = map(x->parse(Int64,x), textlines)
 
 
 function part1(depths)
-    comp = 0
     count = 0
-    for d in depths
-        if d > comp
+    for i in 2:length(depths)
+        if depths[i-1] < depths[i]
            count += 1
         end
-       comp = d
     end
     count - 1
 end
