@@ -2,19 +2,19 @@ textlines = readlines("data/day1")
 depths = map(x->parse(Int64,x), textlines)
 
 
-function part1(depths)
-    count = 0
+function part1(depths::Array)
+    total = zero(eltype(depths))
     for i in 2:length(depths)
         if depths[i-1] < depths[i]
-           count += 1
+            total += 1
         end
     end
-    count - 1
+    total - 1
 end
 
 println(part1(depths))
 
-function part2(depths)
+function part2(depths::Array)
     count = 0
     comp = 0
     for i in 2:length(depths)- 1
