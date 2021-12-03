@@ -20,24 +20,14 @@ end
 
 function part2(mat::Matrix, comp::Function)
     rows, cols = size(mat)
-    bits = zeros(Int, cols)
     for i in 1:cols
         col = mat[:, i]
-        if length(col) == 1
-            bits = mat
-            break
-        end
-        if comp(sum(col), (length(col) / 2))
-           bits[i] = 1
-           inds = col .== 1
-       else
-           inds = col .== 0
-       end
-       mat = mat[inds, :]
+        if length(col) == 1; return mat; end
+        inds = comp(sum(col), (length(col) / 2)) ? col.== 1 : col .== 0
+        mat = mat[inds, :]
     end
-    bits
+    mat
 end
 a = arrayToBinary(part2(mat, <))
 b = arrayToBinary(part2(mat, >=))
-println("$a $b")
 println(a * b)
