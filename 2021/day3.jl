@@ -26,8 +26,7 @@ function part2(mat::Matrix, comp::Function)
         inds = comp(sum(col), (length(col) / 2)) ? col.== 1 : col .== 0
         mat = mat[inds, :]
     end
-    mat
+    arrayToBinary(mat)
 end
-a = arrayToBinary(part2(mat, <))
-b = arrayToBinary(part2(mat, >=))
-println(a * b)
+
+println(part2(mat, <) * part2(mat, >=))
