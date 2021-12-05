@@ -1,7 +1,6 @@
-textlines = readlines("data/day5")
+textlines = readlines("data/day4")
 
 numbers = map(x->parse(Int, x),split(textlines[1], ','))
-
 boardData = textlines[3:end]
 boards = zeros(Int8, 5, 5, Int(ceil(length(boardData) / 6)))
 
