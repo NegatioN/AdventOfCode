@@ -32,5 +32,5 @@ function scoreBoards(boards, numbers)
     scoreboard
 end
 
-score = scoreBoards(boards, numbers)
-println(score)
+scores = scoreBoards(boards, numbers)
+println([scores[1], scores[end]])
