@@ -8,70 +8,84 @@ function part1(data::Array, targets=[2 3 4 7])
     end
     c
 end
-println(part1(data))
+#println(part1(data))
 
+function stoi(t::String)
+    if t == "abcefg"
+        return 0
+    elseif t == "cf"
+        return 1
+    elseif t == "acdeg"
+        return 2
+    elseif t == "acdfg"
+        return 3
+    elseif t == "bcdf"
+        return 4
+    elseif t == "abdfg"
+        return 5
+    elseif t == "abdefg"
+        return 6
+    elseif t == "acf"
+        return 7
+    elseif t == "abcdefg"
+        return 8
+    else
+        return 9
+    end
+end
 
 function buildmap(seq)
-    km = Dict()
-    for s in sort(split(seq, " "), by=length)
-        ss = sort(collect(s))
-        println(ss)
-        if length(ss) == 2
-            km['c'], km['g'] = ss
-        elseif length(ss) == 3
-            km['c'], km['b'], km['g'] = ss
-        elseif length(ss) == 4
-            km['b'], km['c'], km['d'], km['f'] = ss
-        #elseif length(ss) == 7
-        #    km['a'], km['b'], km['c'], km['d'], km['e'], km['f'], km['g'] = ss
+    mapping = Dict()
+    subseq = split(seq, " ")
+    c = countmap(join(subseq))
+    # counts for initial setup, max=10
+    # a=8,c=8, b=6, d=7,g=7, e=4, f=9
+    # we can always know what maps to e, f, b. Because they have unique counts
+    for (k,v) in c
+        if v == 4
+            mapping['e'] = k
+        elseif v == 6
+            mapping['b'] = k
+        elseif v == 9
+            mapping['f'] = k
         end
-        println(km)
     end
-    km
+    # length 6 == zero, six, nine, only zero has 'd' unset. Which means we can find both g and d?
+    # the letter which has 7 count overall, but only 2 counts in the group of length==6 strings? zero, six and nine
+    d_candidates = collect(keys(c))[values(c) .== 7]
+
+    sixletter_words = filter(x->length(x) == 6, subseq)
+    d_check = countmap(join(sixletter_words))
+    mapping['d'], mapping['g'] = d_check[d_candidates[1]] > 2 ? (d_candidates[2], d_candidates[1]) : (d_candidates[1], d_candidates[2])
+
+    num_six = filter(x->mapping['e'] in x, sixletter_words)[1]
+    mapping['c'] = setdiff("abcdefg", num_six)[1]
+    mapping['a'] = filter(x->x != mapping['c'], collect(keys(c))[values(c) .== 8])[1]
+    #println(setdiff("abcdefg", keys(mapping)))
+    println(length(mapping))
+
+    println(sort(mapping))
+    Dict(v=>k for (k,v) in mapping)
 end
 
 function part2(data::Array)
+    total = 0
     for (seq, out) in data
-        #todo map all easy values directly to a number.
-        #todo make func to decide the hard cases (5count?)
-        # 0, 6, 9 = 6 count
-        # 2, 3, 5 = 5 count
-
         mapping = buildmap(seq)
-        mappedtext = map(x->get(mapping, x, x), out)
-        println(mappedtext)
-        counts = countmap.(split(mappedtext, " "))
+        mappedtext = join.(sort.(collect.(map.(x->get(mapping, x, x), split(out, " ")))))
         digits = []
-        for (e, n) in zip(counts, length.(counts))
-            if n == 5
-               if haskey(e, 'g')
-                   push!(digits, 2)
-               elseif haskey(e, 'e')
-                   push!(digits, 5)
-               else
-                   push!(digits, 3)
-               end
-            elseif n == 6
-               if !haskey(e, 'g')
-                   push!(digits, 9)
-               elseif !haskey(e, 'f')
-                   push!(digits, 0)
-               else
-                   push!(digits, 6)
-               end
-            elseif n == 2
-               push!(digits, 1)
-           elseif n == 3
-               push!(digits, 7)
-           elseif n == 4
-               push!(digits, 4)
-           elseif n == 7
-               push!(digits, 8)
-            end
-        end
+        println(sort(mapping))
+        println(seq)
         println(out)
+        for t in mappedtext
+            println(t)
+            push!(digits, stoi(t))
+        end
         println(digits)
+        total += parse(Int, join(digits))
     end
+    total
 end
+
 
 println(part2(data))
