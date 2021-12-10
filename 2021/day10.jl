@@ -1,15 +1,16 @@
 data = readlines("data/day10")
 
-const closers = Dict([('(', ')'), ('[', ']'), ('{', '}'), ('<', '>')])
-const scores = Dict([(')', 3), (']', 57), ('}', 1197), ('>', 25137)])
-const valscores = Dict([('(', 1), ('[', 2), ('{', 3), ('<', 4)])
+const openers, clozers = "([{<", ")]}>"
+const closers = Dict(zip(openers, clozers))
+const scores = Dict(zip(clozers, [3 57 1197 25137]))
+const valscores = Dict(zip(openers, 1:4))
 
 function scorechunks(data::Array)
     s, validscores = 0, []
     for l in data
         openchunks, v = [], true
         for c in l
-            if c in "([{<"
+            if c in openers
                 append!(openchunks, c)
             else
                 if get(closers, openchunks[end], 'a') == c
