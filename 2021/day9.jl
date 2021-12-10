@@ -1,13 +1,38 @@
-data = readlines("data/day9")
+data = map(x->"9"*x*"9", readlines("data/day9"))
 l = length(data[1])
-println(l)
+insert!(data, 1, repeat("9", l))
+insert!(data, length(data)+1, repeat("9", l))
 
-lowpoints = []
-d = [parse(Int8, x) for x in join(data)]
-for i in 1:length(d)
-   adj = filter(x->x>1&&x<length(d), [i-l, i-1, i+1, i+l])
-   if sum(d[adj] .>= d[i]) == length(adj)
-       push!(lowpoints, i)
-   end
+data = [parse(Int8, x) for x in join(data)]
+function findlowpoints(data::Array)
+    lowpoints = []
+    for i in 1:length(data)
+       adj = filter(x->x>1&&x<length(data), [i-l, i-1, i+1, i+l])
+       if sum(data[adj] .> data[i]) == length(adj)
+           push!(lowpoints, i)
+       end
+    end
+    lowpoints
 end
-println(sum(d[lowpoints] .+ 1))
+lowpoints = findlowpoints(data)
+println(sum(data[lowpoints] .+ 1))
+
+function findbasins(data::Array, lowpoints::Array)
+    basins = []
+    for lp in lowpoints
+        basin = [lp]
+        candidates = [lp]
+        while length(candidates) > 0
+            i = pop!(candidates)
+            adj = filter(x->x>1&&x<length(data), [i-l, i-1, i+1, i+l])
+            ncand = setdiff(adj[data[adj] .!= 9], basin)
+            append!(candidates, ncand)
+            append!(basin, ncand)
+        end
+        append!(basins, length(basin))
+    end
+    r = sort(basins, rev=true)[1:3]
+    r[1] * r[2] * r[3]
+end
+
+println(findbasins(data, lowpoints))
