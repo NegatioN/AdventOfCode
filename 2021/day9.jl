@@ -8,7 +8,7 @@ function findlowpoints(data::Array)
     lowpoints = []
     for i in 1:length(data)
        adj = filter(x->x>1&&x<length(data), [i-l, i-1, i+1, i+l])
-       if sum(data[adj] .> data[i]) == length(adj)
+       if all(>(data[i]), data[adj])
            push!(lowpoints, i)
        end
     end
@@ -22,7 +22,7 @@ function findbasins(data::Array, lowpoints::Array)
     for lp in lowpoints
         basin = [lp]
         candidates = [lp]
-        while length(candidates) > 0
+        while !isempty(candidates)
             i = pop!(candidates)
             adj = filter(x->x>1&&x<length(data), [i-l, i-1, i+1, i+l])
             ncand = setdiff(adj[data[adj] .!= 9], basin)

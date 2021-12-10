@@ -37,10 +37,9 @@ end
 function buildmap(seq)
     mapping = Dict{Char, Char}()
     subseq = split(seq, " ")
-    c = countmap(join(subseq))
     # a=8,c=8, b=6, d=7,g=7, e=4, f=9
     # we can always know what maps to e, f, b. Because they have unique counts
-    for (k,v) in c
+    for (k,v) in countmap(join(subseq))
         if v == 4
             mapping['e'] = k
         elseif v == 6
@@ -59,17 +58,14 @@ end
 
 function part2(data::Array)
     total = 0
-    for (seq, out) in data
+    for (seq, output) in data
         mapping = buildmap(seq)
-        mappedtext = join.(sort.(collect.(map.(x->get(mapping, x, x), split(out, " ")))))
-        digits = []
-        for t in mappedtext
-            push!(digits, stoi(t))
+        digits = zeros(Int8, 4)
+        for (i, m) in enumerate(join.(sort.(collect.(map.(x->get(mapping, x, x), split(output, " "))))))
+            digits[i] = stoi(m)
         end
         total += parse(Int, join(digits))
     end
     total
 end
-
-
 println(part2(data))
