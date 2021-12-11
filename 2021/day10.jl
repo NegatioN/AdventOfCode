@@ -9,14 +9,10 @@ function scorechunks(data::Array)
     for l in data
         openchunks = []
         for c in l
-            if c in openers
-                append!(openchunks, c)
+            if c in openers append!(openchunks, c)
             else
-                if closers[last(openchunks)] == c
-                    pop!(openchunks)
-                else
-                    s += scores[c]
-                    @goto corrupted
+                if closers[last(openchunks)] == c pop!(openchunks)
+                else s += scores[c]; @goto corrupted
                 end
             end
         end

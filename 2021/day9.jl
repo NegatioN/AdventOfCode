@@ -31,8 +31,7 @@ function findbasins(data::Array, lowpoints::Array)
         end
         append!(basins, length(basin))
     end
-    r = sort(basins, rev=true)[1:3]
-    r[1] * r[2] * r[3]
+    reduce(*, sort(basins, rev=true)[1:3])
 end
 
 println(findbasins(data, lowpoints))
