@@ -1,19 +1,17 @@
 data = reduce(hcat, map(x->parse.(Int32, [y for y in x]), readlines("data/day11")))
 
-function makeSelection(target::CartesianIndex, highest::Int)
+function makeSelection(target::CartesianIndex, cm::CartesianIndices)
    i, j = Tuple(target)
-   js, je = j > 1 ? j-1 : j, j < highest ? j+1 : j
-   is, ie = i > 1 ? i-1 : i, i < highest ? i+1 : i
-   map(CartesianIndex, Base.Iterators.product(is:ie, js:je))
+   filter(x->x ∈ cm, map(CartesianIndex, Base.Iterators.product(i-1:+1, j-1:j+1)))
 end
 function simulate(inp::Matrix, steps::Int)
     s = 0
-    data, highest = copy(inp), size(inp)[1]
+    data, cm = copy(inp), CartesianIndices(inp)
     for i in 1:steps
         data .+= 1
         while any(>=(10), data)
             for c in findall(x->x>=10, data)
-                data[makeSelection(c, highest)] .+= 1
+                data[makeSelection(c, cm)] .+= 1
                 data[c] = -9999
             end
         end
