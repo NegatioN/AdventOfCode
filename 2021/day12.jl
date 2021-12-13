@@ -26,3 +26,4 @@ part2(x, c) = !x.large && maximum(values(countmap(filter(y->!y.large,  c)))) > 1
 res = traverse(nodes["start"], Vector{Node}(), Vector{Vector{Node}}(), part2)
 println(length(res))
 println(sum(filter(y->y<2, count.(x->x.label=="start", res)))) # Exclude paths which use "start"-node twice.
+#TODO dont allocate, just use an array to keep count of occurences of node traversals
