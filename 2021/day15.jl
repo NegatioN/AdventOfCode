@@ -5,16 +5,17 @@ function reconstruct_path(camefrom::Dict{CartesianIndex, CartesianIndex}, curren
     while current ∈ keys(camefrom)
         current = camefrom[current]
         push!(total_path, current)
-   end
-   total_path
+    end
+    total_path
 end
 
 function astar(data::Matrix)
-    start, goal, indices = CartesianIndex(1,1), CartesianIndex(size(data)), CartesianIndices(size(data))
-    h(x) = sum(Tuple(goal) .- Tuple(x))
+    start, goal = CartesianIndex(1,1), CartesianIndex(size(data))
+    const indices =  CartesianIndices(size(data))
+    h(x::CartesianIndex) = sum(goal[1]+goal[2] - x[1] - x[2])
     candidates = [start]
     camefrom = Dict{CartesianIndex, CartesianIndex}()
-    gscore, fscore = ones(Int32, size(data)) * 16000, ones(Int32, size(data)) * 16000
+    gscore, fscore = ones(Int16, size(data)) * 16000, ones(Int16, size(data)) * 16000
     gscore[start], fscore[start] = 0, h(start)
 
     while !isempty(candidates)
