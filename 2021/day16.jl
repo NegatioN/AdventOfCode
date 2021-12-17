@@ -18,26 +18,7 @@ function four(data)
 end
 @test four([1 0 1 1 1 1 1 1 1 0 0 0 1 0 1 0 0 0]) == (Vector{Int64}([0,1,1,1,1,1,1,0,0,1,0,1]), 15)
 
-function calculate(data, ptype)
-        if ptype == 0 f = +
-        elseif ptype == 1 f = *
-        elseif ptype == 2 f = min
-        elseif ptype == 3 f = max
-        elseif ptype == 5 f = >
-        elseif ptype == 6 f = <
-        elseif ptype == 7 f = ==
-        end
-        outputs = reverse(digits(reduce(f, data), base=2))
-end
-
-@test calculate([55, 100], 0) == digits(155, base=2) |> reverse
-@test frombinary(calculate([6, 9], 1)) == 54
-@test calculate([55, 10, 33], 2) == digits(10, base=2) |> reverse
-@test calculate([55, 10, 33], 3) == digits(55, base=2) |> reverse
-@test calculate([55, 10], 5) == digits(1, base=2)  |> reverse
-@test calculate([55, 10], 6) == digits(0, base=2) |> reverse
-@test calculate([55, 10], 7) == digits(0, base=2) |> reverse
-@test calculate([55, 55], 7) == digits(1, base=2) |> reverse
+const op_lookup = Dict{Int, Function}(0=>+, 1=>*, 2=>min, 3=>max, 5=>>, 6=><, 7=>==)
 
 function packet(data::Array)
     outputs = Vector{Int64}()
@@ -67,7 +48,7 @@ function packet(data::Array)
                 seek += i - 1
             end
         end
-        outputs = calculate(outputs, ptype)
+        outputs = reverse(digits(reduce(op_lookup[ptype], outputs), base=2))
     end
     outputs, seek
 end
