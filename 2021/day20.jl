@@ -1,10 +1,19 @@
 function stupidpad(x, f, padsize=1)
-    r = f(Int, size(x).+2*padsize)
+    r = f(Int8, size(x).+2*padsize)
     r[padsize+1:end-padsize, padsize+1:end-padsize] = x
     r
 end
-matbin2dec(x) = parse(Int, join(x), base=2)
-function enhance(image, missing_val) algo[matbin2dec.(map.(x->x ∈ all_inds ? image[x] : missing_val, selections)).+1] end
+
+function bin2dec(arr, val = 0)
+    v = 2^(length(arr)-1)
+    for i in eachindex(arr)
+        val += v*arr[i]
+        v >>= 1
+    end
+    val
+end
+
+function enhance(image, missing_val) algo[bin2dec.(map.(x->x ∈ all_inds ? image[x] : missing_val, selections)).+1] end
 function execute(image, num)
     for i in repeat([0,1], num÷2)
         image = enhance(image, i)
