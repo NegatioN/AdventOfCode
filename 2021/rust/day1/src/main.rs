@@ -13,4 +13,10 @@ fn main() {
         .map(|(x, y)| (x > y) as u32)
         .sum();
     println!("{}", larger_than_prev);
+
+    let mut part2: u32 = 0;
+    for i in 1..nums.len()-2 {
+        part2 += (nums[i-1] < nums[i+2]) as u32;
+    }
+    println!("{}", part2);
 }
