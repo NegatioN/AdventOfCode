@@ -4,3 +4,5 @@ __pycache__/
 .nrepl-port
 target/
 input.txt
+build/
+target/
