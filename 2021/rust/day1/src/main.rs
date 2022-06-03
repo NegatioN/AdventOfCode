@@ -1,4 +1,15 @@
 use std::fs;
+use std::time::{Instant};
+
+fn summator(arr: &Vec<u32>, cmp_offset: usize) -> u32 {
+    let s = arr
+        .iter()
+        .zip(arr[cmp_offset+1..].iter())
+        .map(|(x, y)| (x < y) as u32)
+        .sum();
+    s
+}
+
 fn main() {
     let filename = "../../data/day1";
     let content = fs::read_to_string(filename).expect("Something went wrong");
@@ -7,16 +18,9 @@ fn main() {
         .map(|n| n.parse().expect("parse error"))
         .collect();
 
-    let larger_than_prev: u32 = nums[1..]
-        .iter()
-        .zip(nums[..nums.len() - 1].iter())
-        .map(|(x, y)| (x > y) as u32)
-        .sum();
-    println!("{}", larger_than_prev);
-
-    let mut part2: u32 = 0;
-    for i in 1..nums.len()-2 {
-        part2 += (nums[i-1] < nums[i+2]) as u32;
-    }
-    println!("{}", part2);
+    let start = Instant::now();
+    println!("{}", summator(&nums, 0));
+    let duration = start.elapsed();
+    println!("{}", summator(&nums, 2));
+    println!("Time elapsed in summator() is: {:?}", duration);
 }
