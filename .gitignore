@@ -6,3 +6,5 @@ target/
 input.txt
 build/
 target/
+.bsp/
+.idea/
