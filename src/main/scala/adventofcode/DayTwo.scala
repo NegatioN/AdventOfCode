@@ -30,6 +30,7 @@ object DayTwo extends App{
   }
   println(horiz * vert)
 
+  // Slightly cleaner version
   def calculate(lines: List[Tuple2[String, Int]]): Seq[Int] = {
     val (horizontal, vertical, aim) = lines.foldLeft(0, 0, 0) {
       case ((horizontal, vertical, aim), (command, amount)) =>
