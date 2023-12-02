@@ -3,52 +3,37 @@ object Day2 extends App {
 
   val fname = "data/day2"
 
-  def parseExample(line: String): (Int, Seq[Map[String, Int]]) = {
+  case class GameSet(red: Int, green: Int, blue: Int)
+  case class Game(id: Int, sets: Seq[GameSet])
+
+  def parse(line: String): Game = {
     val s"Game $game: $examples" = line
-    val r = examples.split(";").map(ex => {
-      ex.split(",").map{exSub =>
+    val gameSets = examples.split(";").map(ex => {
+      val m = ex.split(",").map { exSub =>
         val s"$num $color" = exSub.strip()
         (color, num.toInt)
       }.toMap
+      GameSet(m.getOrElse("red", 0), m.getOrElse("green", 0), m.getOrElse("blue", 0))
     })
-    (game.toInt, r)
+    Game(game.toInt, gameSets)
   }
 
-  val currentRules = Map("green" -> 13, "red" -> 12, "blue" -> 14)
-
-  def validGame(games: Seq[Map[String, Int]], ruleMap: Map[String, Int]): Boolean = {
-    val resp = games.map(oneGame => {
-      oneGame.map {
-        case (key, value) => ruleMap(key) >= value
-      }
-    }).flatten.exists(_ == false)
-    resp != true
-  }
+  val possibleGame = GameSet(12, 13, 14)
 
   def part1(fname: String) = {
-    val games = Source.fromFile(fname).getLines().map(line => {
-      parseExample(line)
-    }).toMap
-    games.map{ case (key, value) => if(validGame(value, currentRules)) key else 0 }.sum
+    val games = Source.fromFile(fname).getLines().map(line => {parse(line)})
+    games.filter{g =>
+      g.sets.forall{s => s.red <= possibleGame.red && s.green <= possibleGame.green && s.blue <= possibleGame.blue}
+    }.map(_.id).sum
   }
 
-  //println(part1(fname))
-
-  def power(n: Int): Int = n * n
-  def fewestPossible(games: Seq[Map[String, Int]]) = {
-    val keys: Seq[String] = Seq("red", "green", "blue")
-    val out = keys.map(k => games.map(g => g.getOrElse(k, 1)))
-    out.map(_.max).reduce(_*_)
-  }
+  println(part1(fname))
 
   def part2(fname: String) = {
-    val games = Source.fromFile(fname).getLines().map(line => {
-      parseExample(line)
-    }).toMap
-
-    games.map { case (key, value) => fewestPossible(value) }.sum
-
+    val games = Source.fromFile(fname).getLines().map(line => (parse(line)))
+    games.map(g => {
+      g.sets.map(_.red).max *  g.sets.map(_.green).max * g.sets.map(_.blue).max
+    }).sum
   }
   println(part2(fname))
 }
-
