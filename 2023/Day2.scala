@@ -32,7 +32,7 @@ object Day2 extends App {
   def part2(fname: String) = {
     val games = Source.fromFile(fname).getLines().map(line => (parse(line)))
     games.map(g => {
-      g.sets.map(_.red).max *  g.sets.map(_.green).max * g.sets.map(_.blue).max
+      g.sets.map(_.red).max * g.sets.map(_.green).max * g.sets.map(_.blue).max
     }).sum
   }
   println(part2(fname))
