@@ -1,16 +1,16 @@
 import scala.io.Source
+import collection.mutable.HashMap
 import scala.math.pow
 
 object Day4 extends App {
-  val fname = "data/day4test"
+  val fname = "data/day4"
   val text = Source.fromFile(fname).getLines().toSeq
 
   case class CardGame(num: Int, winningNums: Set[Int], myNums: Set[Int]){
     def score = pow(2, myNums.intersect(winningNums).size-1).intValue
     def cardCopies = {
       val overlap = myNums.intersect(winningNums).size
-      val res = Range(num+1, num+overlap+1).toSeq
-      res
+      Range(num+1, num+overlap+1).toSet
     }
   }
   def parse(line: String): CardGame = {
@@ -28,11 +28,14 @@ object Day4 extends App {
   println(a)
 
   def part2(fname: String) = {
-    val games= Source.fromFile(fname).getLines().map(line => {
+    val cardCounts = new HashMap[Int, Int]()
+    val games = Source.fromFile(fname).getLines().map(line => {
       parse(line)
-    }).map(_.cardCopies).flatten.toSeq
-    println(games)
-    games.groupBy(a => a).mapValues(_.size).toSeq
+    }).map{c =>
+      val existingCopies: Int = cardCounts.getOrElse(c.num, 0) + 1
+      c.cardCopies.map { y => cardCounts.put(y, cardCounts.getOrElse(y, 0) + existingCopies) }
+    }.toSet
+    cardCounts.values.sum + games.size
   }
 
   val b = part2(fname)
