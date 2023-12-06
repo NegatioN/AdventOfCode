@@ -8,3 +8,4 @@ build/
 target/
 .bsp/
 .idea/
+.scala-build/
